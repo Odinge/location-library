@@ -1,0 +1,39 @@
+extends layout
+
+block content
+
+  if !del
+    h1 ID: #{bookinstance._id}
+  else
+    h1 #{title}: #{bookinstance._id}
+
+  p #[strong Title:] 
+    a(href=bookinstance.book.url) #{bookinstance.book.title}
+  p #[strong Imprint:] #{bookinstance.imprint}
+
+  p #[strong Status:] 
+    if bookinstance.status=='可供借阅'
+      span.text-success #{bookinstance.status}
+    else if bookinstance.status=='馆藏维护'
+      span.text-danger #{bookinstance.status}
+    else
+      span.text-warning #{bookinstance.status} 
+      
+  if bookinstance.status!='可供借阅'
+    p #[strong Due back:] #{bookinstance.due_back_formatted}
+  
+  if !del
+    hr
+    p
+      a(href=bookinstance.url+'/delete') Delete Bookinstance
+      span(style="margin:0 10px") |
+      a(href=bookinstance.url+'/update') Update Bookinstance
+  else
+    hr
+    p Do you really want to delete this Book Instance?
+  
+    form(method='POST' action='')
+      div.form-group
+        input#bookinstanceid.form-control(type='hidden',name='bookinstanceid', required='true', value=bookinstance._id )
+
+      button.btn.btn-primary(type='submit') Delete
